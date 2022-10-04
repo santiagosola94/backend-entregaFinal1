@@ -7,6 +7,18 @@ const router = express.Router()
 const leer = fs.readFileSync('./public/data/listadoProductos.json')
 const parsearProductos = JSON.parse(leer)
 
+const admin = false;
+
+const esAdministrador = () => {
+    return (req,res,next)=>{
+        if(admin === true){
+            next();
+        }else{
+            res.send({status:"error",error: `ruta /api/productos${req.url} método ${req.method} no autorizado`})
+        }
+    }
+}
+
 
 router.get('/', (req,res)=>{
     res.send(parsearProductos)
@@ -26,7 +38,7 @@ router.get('/:id', (req,res)=>{
     }
 })
 
-router.post('/', (req,res)=>{
+router.post('/', esAdministrador(), (req,res)=>{
     const { nombre, descripcion, codigo, foto, precio, stock} = req.body
     let id;
     /*Este condicional lo hice para evitar que se repita el id al momento de eliminar un producto.
@@ -59,7 +71,7 @@ router.post('/', (req,res)=>{
     }
 })
 
-router.put("/:id", (req,res)=>{
+router.put("/:id", esAdministrador(), (req,res)=>{
     const {id} = req.params
     const {timestamp, nombre, descripcion, codigo, foto, precio, stock} = req.body
 
@@ -83,7 +95,7 @@ router.put("/:id", (req,res)=>{
 })
 
 
-router.delete("/:id", (req,res)=>{
+router.delete("/:id", esAdministrador(), (req,res)=>{
     const {id} = req.params
     const productoEncontrado = parsearProductos.find((producto)=> {
         return producto.id == id

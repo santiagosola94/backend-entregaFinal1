@@ -14,7 +14,14 @@ app.use(express.static(__dirname + '/public'))
 app.use('/api/productos',productosJS)
 app.use('/api/carrito',carritoJS)
 
+
+app.use(function (err, req, res, next) {
+    console.error(err.stack)
+    res.status(500).send('Something broke!')
+})
+
 const PORT = process.env.PORT||8080;
+
 
 app.listen(PORT, ()=>{
     console.log(`Servidor Iniciado en el puerto: ${PORT}`)
