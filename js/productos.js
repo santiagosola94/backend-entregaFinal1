@@ -7,7 +7,7 @@ const router = express.Router()
 const leer = fs.readFileSync('./public/data/listadoProductos.json')
 const parsearProductos = JSON.parse(leer)
 
-const admin = false;
+const admin = true;
 
 const esAdministrador = () => {
     return (req,res,next)=>{
