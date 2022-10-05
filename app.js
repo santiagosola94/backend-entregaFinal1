@@ -20,6 +20,14 @@ app.use(function (err, req, res, next) {
     res.status(500).send('Something broke!')
 })
 
+app.get('*', function (req, res) {
+
+    res.send({ status: "error", description: `ruta ${req.url} método ${req.method} no implementada` });
+
+}
+
+)
+
 const PORT = process.env.PORT||8080;
 
 
